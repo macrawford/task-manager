@@ -5,16 +5,13 @@ class App extends React.Component {
         super(props)
         this.state = {
             input: '',
-            todos: [
-                {text: 'Change oil'}
-            ]
+            todos: []
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.toggleCompleted = this.toggleCompleted.bind(this)
     }
     handleChange(e) {
-        console.log('e.target.value: ', e.target.value)
-        console.log('this.state.input: ', this.state.input)
         this.setState({
             input: e.target.value
         })
@@ -22,12 +19,24 @@ class App extends React.Component {
     handleSubmit(event) {
         event.preventDefault()
         var sliced = [...this.state.todos]
-        sliced.push({text: this.state.input})
-        console.log('sliced: ', sliced)
+        sliced.push({text: this.state.input, completed: false})
+        this.setState({
+            todos: sliced,
+            input: ''
+        })
+    }
+    toggleCompleted(index) {
+        console.log('this.state.todos: ', this.state.todos)
+        var sliced = [...this.state.todos];
+        sliced[index].completed = !sliced[index].completed;
         this.setState({
             todos: sliced
         })
     }
+    // Goals
+    // Be able to mark completed or not
+        // completed has a slash thru it
+    // Be able to delete from list
     render() {
         return(
             <div>
@@ -44,8 +53,10 @@ class App extends React.Component {
                 <div>
                     {this.state.todos.map((todo, index) => {
                         return (
-                            <div>
-                                {todo.text}
+                            <div key={index}>
+                                {todo.completed ? <div>{todo.text}</div> : <div>{todo.text}</div>}
+                                <button onClick={() => this.toggleCompleted(index)}>Mark completed</button>
+                                <button>Delete</button>
                             </div>
                         )
                     })}
