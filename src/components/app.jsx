@@ -10,6 +10,7 @@ class App extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.toggleCompleted = this.toggleCompleted.bind(this)
+        this.deleteTodo = this.deleteTodo.bind(this)
     }
     handleChange(e) {
         this.setState({
@@ -18,17 +19,25 @@ class App extends React.Component {
     }
     handleSubmit(event) {
         event.preventDefault()
+        event.target.reset()
         var sliced = [...this.state.todos]
         sliced.push({text: this.state.input, completed: false})
         this.setState({
-            todos: sliced,
-            input: ''
+            input: '',
+            todos: sliced
         })
     }
     toggleCompleted(index) {
         console.log('this.state.todos: ', this.state.todos)
         var sliced = [...this.state.todos];
         sliced[index].completed = !sliced[index].completed;
+        this.setState({
+            todos: sliced
+        })
+    }
+    deleteTodo(index) {
+        var sliced = [...this.state.todos];
+        sliced.splice(index, 1);
         this.setState({
             todos: sliced
         })
@@ -54,9 +63,9 @@ class App extends React.Component {
                     {this.state.todos.map((todo, index) => {
                         return (
                             <div key={index}>
-                                {todo.completed ? <div>{todo.text}</div> : <div>{todo.text}</div>}
+                                {todo.completed ? <div>{todo.text}Completed</div> : <div>{todo.text}</div>}
                                 <button onClick={() => this.toggleCompleted(index)}>Mark completed</button>
-                                <button>Delete</button>
+                                <button onClick={() => this.deleteTodo(index)}>Delete</button>
                             </div>
                         )
                     })}
